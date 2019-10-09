@@ -1,0 +1,34 @@
+<form #f="ngForm" (ngSubmit)="submit(f)">
+    <div class="form-group">
+        <label for="firstName">Firstname</label>
+        <input required ngModel name="firstName" #firstName="ngModel" (change)="log(firstName)" id="firstName" type="text" class="form-control">
+        <div class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">First name is required</div>
+    </div>
+    <div class="form-group">
+        <label for="comment">Comment</label>
+        <textarea ngModel name="comment" id="comment" cols="30" rows="10" class="form-control"></textarea>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ngModel name="isSubscribed"> Subscribe to mailing list
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="contactMethod">
+            <select multiple ngModel name="contactMethod" id="contactMethod" class="form-control" name="contactMethod">
+                <option value=""></option>
+                <option *ngFor="let method of contactMethods" [value]="method.id">{{ method.name }}</option>
+            </select>
+        </label>
+    </div>
+    <div *ngFor="let method of contactMethods" class="radio">
+        <label>
+            <input ngModel type="radio" name="contactMethod" [value]="method.id">
+            {{ method.name }}
+        </label>
+    </div>
+    <p>
+        {{ f.value | json }}
+    </p>
+    <button [disabled]="!f.valid" class="btn btn-primary">Submit</button>
+</form>
