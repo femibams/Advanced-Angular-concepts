@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -11,6 +11,12 @@ import { SignupFormComponent } from './signup-form/signup-form.component';
 import { NewCourseFormComponent } from './new-course-form/new-course-form.component';
 import { PostsComponent } from './posts/posts.component';
 import { PostService } from './services/post.service';
+import { AppErrorHandler } from './common/app-error-handler';
+import { HomeComponent } from './home/home.component';
+import { GithubProfileComponent } from './github-profile/github-profile.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { GithubFollowersComponent } from './github-followers/github-followers.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +25,12 @@ import { PostService } from './services/post.service';
     ContactFormComponent,
     SignupFormComponent,
     NewCourseFormComponent,
-    PostsComponent
+    PostsComponent,
+    HomeComponent,
+    GithubProfileComponent,
+    NotFoundComponent,
+    GithubFollowersComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +40,8 @@ import { PostService } from './services/post.service';
     HttpClientModule
   ],
   providers: [
-    PostService
+    PostService,
+    { provide: ErrorHandler, useClass: AppErrorHandler }
   ],
   bootstrap: [AppComponent]
 })

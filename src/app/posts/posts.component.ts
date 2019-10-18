@@ -15,59 +15,61 @@ export class PostsComponent implements OnInit {
   constructor(private service: PostService) {}
 
   ngOnInit(){
-    this.service.getPosts()
+    this.service.getAll()
       .subscribe(
         response => {
           console.log('subscribe ***',response);
           this.posts = response
-        }, 
-        (error: Response) => {
-          console.log('component logger**',error)
         })
   }
 
   createPost(input: HTMLInputElement){
     let post = { title: input.value };
+    this.posts.splice(0, 0, post);
+  
     input.value = '';
-    this.service.createPost(post)
+    this.service.create(post)
       .subscribe(
         response => {
           post['id'] = response['id'];
-          this.posts.splice(0, 0, post);
           console.log(response)
         }, 
         (error: AppError) => {
+          this.posts.splice(0, 1)
+
           if (error instanceof BadInput) {
 
           }
           else {
-            alert('An unexpected error occured');
+            throw error;
           }
         })
   }
 
   updatePost(post) {
-    this.service.updatePost(post)
+    this.service.update(post)
       .subscribe((response) => {
         console.log(response)
-      }, (error) => {
-        console.log(error)
       })
   }
 
   deletePost(post) {
-    this.service.deletePost("kjfk")
+    let index = this.posts.indexOf(post)
+    this.posts.splice(index, 1)
+
+    this.service.delete("kjfk")
       .subscribe(
         (response) => {
-          let index = this.posts.indexOf(post)
-          this.posts.splice(index, 1)
+          // let index = this.posts.indexOf(post)
+          // this.posts.splice(index, 1)
         },
         (error: AppError) => {
+          this.posts.splice(index, 0, post)
+
           if (error instanceof NotFoundError)
             alert('This post has already been deleted')
           else{
-            alert('An unexpected error occured')
-            console.log(error)
+            throw error;
           }
         })
   }
